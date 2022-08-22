@@ -7,23 +7,19 @@ namespace eCommerce.Server.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly DataContext _dataContext;
+        private readonly IProductService _productService;
 
-        public ProductController(DataContext dataContext)
+        public ProductController(IProductService productService)
         {
-            _dataContext = dataContext;
+            _productService = productService;
         }
 
         [HttpGet]
         public async Task<ActionResult<ServiceResponse<List<Product>>>> GetProducts()
         {
-            var products = await _dataContext.Products.ToListAsync();
-            var response = new ServiceResponse<List<Product>>
-            {
-                Data = products
-            };
+            var result = await _productService.GetProductsAsync();
 
-            return Ok(response);
+            return Ok(result);
         }
     }
 }
